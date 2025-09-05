@@ -19,6 +19,7 @@ target_include_directories(${test_name} PUBLIC
 )
 
 target_link_libraries(${test_name}
+PRIVATE
     core
     Catch2::Catch2WithMain
 )

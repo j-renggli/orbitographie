@@ -2,7 +2,7 @@
 
 #include "utils/kepler_checks.h"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace orbit;
@@ -26,25 +26,25 @@ TEST_CASE("Parabolic construction")
 
     const double root = solver->solveForInternal(time1);
     const double guess = solver->initialGuess();
-    CHECK(guess == Approx(4.5158e-06));
-    CHECK(1e9 * solver->f(guess) == Approx(1.3501449));
-    CHECK(solver->df(guess) == Approx(797204947.8064689636));
+    CHECK(guess == Catch::Approx(4.5158e-06));
+    CHECK(1e9 * solver->f(guess) == Catch::Approx(1.3501449));
+    CHECK(solver->df(guess) == Catch::Approx(797204947.8064689636));
 
-    CHECK(root == Approx(4.51579e-06));
-    CHECK(1e12 * solver->f(root) == Approx(0.45474735089));
-    CHECK(solver->df(root) == Approx(797204947.8064689636));
+    CHECK(root == Catch::Approx(4.51579e-06));
+    CHECK(1e12 * solver->f(root) == Catch::Approx(0.45474735089));
+    CHECK(solver->df(root) == Catch::Approx(797204947.8064689636));
 
     const auto factors = solver->factorsAt(guess);
-    CHECK(factors.f == Approx(0.9999949248));
-    CHECK(factors.g == Approx(3599.9939234559));
-    CHECK(1e6 * factors.df == Approx(-0.0028322658));
-    CHECK(factors.dg == Approx(0.9999949476));
+    CHECK(factors.f == Catch::Approx(0.9999949248));
+    CHECK(factors.g == Catch::Approx(3599.9939234559));
+    CHECK(1e6 * factors.df == Catch::Approx(-0.0028322658));
+    CHECK(factors.dg == Catch::Approx(0.9999949476));
 
     const auto rootFactors = solver->factorsAt(root);
-    CHECK(rootFactors.f == Approx(0.999995));
-    CHECK(rootFactors.g == Approx(3599.99));
-    CHECK(rootFactors.df == Approx(-2.83227e-09));
-    CHECK(rootFactors.dg == Approx(0.999995));
+    CHECK(rootFactors.f == Catch::Approx(0.999995));
+    CHECK(rootFactors.g == Catch::Approx(3599.99));
+    CHECK(rootFactors.df == Catch::Approx(-2.83227e-09));
+    CHECK(rootFactors.dg == Catch::Approx(0.999995));
 }
 
 TEST_CASE("Parabolic orbit")

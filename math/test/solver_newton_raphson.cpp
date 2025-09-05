@@ -2,7 +2,8 @@
 
 #include "utils/functions.h"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace math;
@@ -24,7 +25,7 @@ TEST_CASE("Newton Raphson with y = x*x -3x -6")
 {
     Quadratic lin;
 
-    SECTION("left root") { CHECK(NewtonRaphson::findRoot(lin, 0.5) == Approx(-1.3722813204)); }
+    SECTION("left root") { CHECK(NewtonRaphson::findRoot(lin, 0.5) == Catch::Approx(-1.3722813204)); }
 
-    SECTION("right root") { CHECK(NewtonRaphson::findRoot(lin, 2.5) == Approx(4.3722813204)); }
+    SECTION("right root") { CHECK(NewtonRaphson::findRoot(lin, 2.5) == Catch::Approx(4.3722813204)); }
 }

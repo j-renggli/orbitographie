@@ -2,7 +2,7 @@
 
 #include "utils/kepler_checks.h"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace orbit;
@@ -26,27 +26,27 @@ TEST_CASE("Hyperbolic construction")
 
     const double root = solver->solveForInternal(time1);
     const double guess = solver->initialGuess();
-    CHECK(guess == Approx(2.08637e-06));
-    CHECK(solver->f(guess) == Approx(365.7294519162));
-    CHECK(solver->df(guess) == Approx(-2089864116.1965370178));
+    CHECK(guess == Catch::Approx(2.08637e-06));
+    CHECK(solver->f(guess) == Catch::Approx(365.7294519162));
+    CHECK(solver->df(guess) == Catch::Approx(-2089864116.1965370178));
 
-    CHECK(1e6 * root == Approx(1.990746694)); // 1.9928
-    CHECK(solver->f(root) == Approx(-7.7968647295));
-    CHECK(solver->df(root) == Approx(-1728794068.021689415));
+    CHECK(1e6 * root == Catch::Approx(1.990746694)); // 1.9928
+    CHECK(solver->f(root) == Catch::Approx(-7.7968647295));
+    CHECK(solver->df(root) == Catch::Approx(-1728794068.021689415));
 
     const auto factors = solver->factorsAt(guess);
-    CHECK(factors.f == Approx(0.9999993621));
-    CHECK(factors.g == Approx(3965.727039547));
-    CHECK(1e6 * factors.df == Approx(0.0007563844));
-    CHECK(factors.dg == Approx(0.9999998724));
-    CHECK(factors.f * factors.dg - factors.df * factors.g == Approx(1.));
+    CHECK(factors.f == Catch::Approx(0.9999993621));
+    CHECK(factors.g == Catch::Approx(3965.727039547));
+    CHECK(1e6 * factors.df == Catch::Approx(0.0007563844));
+    CHECK(factors.dg == Catch::Approx(0.9999998724));
+    CHECK(factors.f * factors.dg - factors.df * factors.g == Catch::Approx(1.));
 
     const auto rootFactors = solver->factorsAt(root);
-    CHECK(rootFactors.f == Approx(0.999999));
-    CHECK(rootFactors.g == Approx(3592.2009099034));
-    CHECK(1e9 * rootFactors.df == Approx(0.828238));
-    CHECK(rootFactors.dg == Approx(1.));
-    CHECK(rootFactors.f * rootFactors.dg - rootFactors.df * rootFactors.g == Approx(1.));
+    CHECK(rootFactors.f == Catch::Approx(0.999999));
+    CHECK(rootFactors.g == Catch::Approx(3592.2009099034));
+    CHECK(1e9 * rootFactors.df == Catch::Approx(0.828238));
+    CHECK(rootFactors.dg == Catch::Approx(1.));
+    CHECK(rootFactors.f * rootFactors.dg - rootFactors.df * rootFactors.g == Catch::Approx(1.));
 }
 
 TEST_CASE("Hyperbolic orbit")

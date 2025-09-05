@@ -1,6 +1,7 @@
 #include <orbit/centerofmass.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace orbit;
@@ -20,11 +21,11 @@ void checkOrbitalElements(const OrbitalElements& elements,
                           double longitude,
                           double periapsis)
 {
-    CHECK(elements.eccentricity_.value() == Approx(eccentricity));
-    CHECK(elements.alpha_.value() * 1e8 == Approx(alpha * 1e8));
-    CHECK(elements.inclination_.value() == Approx(inclination));
-    CHECK(elements.longitude_.value() == Approx(longitude));
-    CHECK(elements.periapsis_.value() == Approx(periapsis));
+    CHECK(elements.eccentricity_.value() == Catch::Approx(eccentricity));
+    CHECK(elements.alpha_.value() * 1e8 == Catch::Approx(alpha * 1e8));
+    CHECK(elements.inclination_.value() == Catch::Approx(inclination));
+    CHECK(elements.longitude_.value() == Catch::Approx(longitude));
+    CHECK(elements.periapsis_.value() == Catch::Approx(periapsis));
 }
 
 } // namespace

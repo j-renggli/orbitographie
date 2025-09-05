@@ -1,6 +1,7 @@
 #include <math/colour/colour.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace math;
@@ -11,10 +12,10 @@ namespace
 void check(const Colour& col, float r, float g, float b, float a = 1.f)
 {
     INFO(col.r() << "f, " << col.g() << "f, " << col.b() << "f");
-    CHECK(col.r() == Approx(r));
-    CHECK(col.g() == Approx(g));
-    CHECK(col.b() == Approx(b));
-    CHECK(col.a() == Approx(a));
+    CHECK(col.r() == Catch::Approx(r));
+    CHECK(col.g() == Catch::Approx(g));
+    CHECK(col.b() == Catch::Approx(b));
+    CHECK(col.a() == Catch::Approx(a));
 }
 
 } // namespace

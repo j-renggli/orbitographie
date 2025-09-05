@@ -2,7 +2,8 @@
 
 #include <math/range.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <deque>
 
@@ -33,7 +34,7 @@ TEST_CASE("Xoshiro with seed")
     Random m{42};
 
     // m produces deterministic outputs (check they match GPU ones)
-    CHECK(m.uniform(range) == Approx(14.137017257));
+    CHECK(m.uniform(range) == Catch::Approx(14.137017257));
     CHECK(m.uniform() == 9106390978755430941ull);
     CHECK(m.uniform() == 2879885515858120463ull);
     CHECK(m.uniform() == 4306470244779094640ull);
@@ -53,9 +54,9 @@ TEST_CASE("Xoshiro with seed")
     CHECK(m.uniform() == 1551269651652525133ull);
     CHECK(m.uniform() == 11780291535123546661ull);
     CHECK(m.uniform() == 12311635331428359044ull);
-    CHECK(m.gaussian<double>() == Approx(-0.8325193529));
-    CHECK(m.gaussian(10.) == Approx(9.7031224002));
-    CHECK(m.gaussian(-5., 0.3) == Approx(-5.1379749829));
+    CHECK(m.gaussian<double>() == Catch::Approx(-0.8325193529));
+    CHECK(m.gaussian(10.) == Catch::Approx(9.7031224002));
+    CHECK(m.gaussian(-5., 0.3) == Catch::Approx(-5.1379749829));
     CHECK(m.uniform(intRange) == 22);
 }
 

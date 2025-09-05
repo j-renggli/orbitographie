@@ -3,7 +3,8 @@
 #include <math/solver/function.h>
 #include <math/solver/newton_raphson.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace galaxias;
 using namespace orbit;
@@ -173,14 +174,14 @@ public:
                      bool longWay = false)
         : GaussProblem{mu, pos1, pos2, longWay}
     {
-        CHECK(r1_.value() == Approx(expected.r1));
-        CHECK(r2_.value() == Approx(expected.r2));
-        CHECK(dv_.value() == Approx(expected.dv));
-        CHECK(k_.value() == Approx(expected.k));
-        CHECK(l_.value() == Approx(expected.l));
-        CHECK(m_.value() == Approx(expected.m));
-        CHECK(p1_.value() == Approx(expected.p1));
-        CHECK(p2_.value() == Approx(expected.p2));
+        CHECK(r1_.value() == Catch::Approx(expected.r1));
+        CHECK(r2_.value() == Catch::Approx(expected.r2));
+        CHECK(dv_.value() == Catch::Approx(expected.dv));
+        CHECK(k_.value() == Catch::Approx(expected.k));
+        CHECK(l_.value() == Catch::Approx(expected.l));
+        CHECK(m_.value() == Catch::Approx(expected.m));
+        CHECK(p1_.value() == Catch::Approx(expected.p1));
+        CHECK(p2_.value() == Catch::Approx(expected.p2));
     }
 
     double alpha() const { return alpha_.value(); }
@@ -195,18 +196,18 @@ TEST_CASE("Gauss problem 1")
     Expectation expected{1.016153, 1.562993, 2.6139965, 2.960511, 2.579146, 0.215969, 0.914764, 1.540388};
     GaussProblemTest problem{mu, r1, r2, expected};
     problem.setTargetTime(t);
-    CHECK(problem.f(1.2) + t == Approx(21380951.));
-    CHECK(problem.df(1.2) == Approx(-83159196.3342416734));
+    CHECK(problem.f(1.2) + t == Catch::Approx(21380951.));
+    CHECK(problem.df(1.2) == Catch::Approx(-83159196.3342416734));
 
     double p = math::solver::NewtonRaphson::findRoot(problem, 1.2);
-    CHECK(p == Approx(1.250633));
+    CHECK(p == Catch::Approx(1.250633));
     const auto vs = problem.velocitiesAt(p);
-    CHECK(1e6 * vs.first[0].value() == Approx(0.193828));
-    CHECK(1e6 * vs.first[1].value() == Approx(0.101824));
-    CHECK(1e6 * vs.first[2].value() == Approx(0.00861759));
-    CHECK(1e6 * vs.second[0].value() == Approx(-0.141359));
-    CHECK(1e6 * vs.second[1].value() == Approx(0.02670098));
-    CHECK(1e6 * vs.second[2].value() == Approx(-0.00443406));
+    CHECK(1e6 * vs.first[0].value() == Catch::Approx(0.193828));
+    CHECK(1e6 * vs.first[1].value() == Catch::Approx(0.101824));
+    CHECK(1e6 * vs.first[2].value() == Catch::Approx(0.00861759));
+    CHECK(1e6 * vs.second[0].value() == Catch::Approx(-0.141359));
+    CHECK(1e6 * vs.second[1].value() == Catch::Approx(0.02670098));
+    CHECK(1e6 * vs.second[2].value() == Catch::Approx(-0.00443406));
 }
 
 TEST_CASE("Gauss problem 2")
@@ -219,17 +220,17 @@ TEST_CASE("Gauss problem 2")
         1., sqrt(3.), 0.9553166181, 0.7320508076, 2.7320508076, 2.7320508076, 0.1444003228, 1.8555996772};
     GaussProblemTest problem{mu, r1, r2, expected};
     problem.setTargetTime(t);
-    CHECK(problem.f(2.) + t == Approx(1.1036324682));
-    CHECK(problem.df(2.) == Approx(-0.3325605584));
+    CHECK(problem.f(2.) + t == Catch::Approx(1.1036324682));
+    CHECK(problem.df(2.) == Catch::Approx(-0.3325605584));
 
     const double p = math::solver::NewtonRaphson::findRoot(problem, 2.);
-    CHECK(p == Approx(2.035532939));
+    CHECK(p == Catch::Approx(2.035532939));
     const auto vs = problem.velocitiesAt(p);
     const auto h1 = r1.cross(vs.first);
     const auto h2 = r2.cross(vs.second);
     CHECK(h1[0].value() == 0.);
-    CHECK(h1[1].value() == Approx(-1.00884));
-    CHECK(h1[2].value() == Approx(1.00884));
+    CHECK(h1[1].value() == Catch::Approx(-1.00884));
+    CHECK(h1[2].value() == Catch::Approx(1.00884));
     CHECK(h1.squaredNorm() == h2.squaredNorm());
 }
 
@@ -252,17 +253,17 @@ TEST_CASE("Gauss problem 2 bis")
                          11835267.1025294587};
     GaussProblemTest problem{mu, r1, r2, expected};
     problem.setTargetTime(t);
-    CHECK(problem.f(2. * radius) + t == Approx(1.1036324682 * timeFactor));
-    CHECK(problem.df(2. * radius) == Approx(-0.0000420677));
+    CHECK(problem.f(2. * radius) + t == Catch::Approx(1.1036324682 * timeFactor));
+    CHECK(problem.df(2. * radius) == Catch::Approx(-0.0000420677));
 
     const double p = math::solver::NewtonRaphson::findRoot(problem, 2. * radius);
-    CHECK(p == Approx(2.035532939 * radius));
+    CHECK(p == Catch::Approx(2.035532939 * radius));
     const auto vs = problem.velocitiesAt(p);
     const auto h1 = r1.cross(vs.first);
     const auto h2 = r2.cross(vs.second);
     CHECK(h1[0].value() == 0.);
-    CHECK(h1[1].value() == Approx(-1.00884 * radius * radius / timeFactor));
-    CHECK(h1[2].value() == Approx(1.00884 * radius * radius / timeFactor));
+    CHECK(h1[1].value() == Catch::Approx(-1.00884 * radius * radius / timeFactor));
+    CHECK(h1[2].value() == Catch::Approx(1.00884 * radius * radius / timeFactor));
     CHECK(h1.squaredNorm() == h2.squaredNorm());
 }
 
@@ -276,15 +277,15 @@ TEST_CASE("Gauss problem 3")
         1., 1.0155048006, 0.1749690457, 0.0155048006, 2.0155048006, 2.0155048006, 0.0038538074, 1.9961461926};
     GaussProblemTest problem{mu, r1, r2, expected};
     problem.setTargetTime(t);
-    CHECK(problem.f(2.) + t == Approx(0.1253217704));
-    CHECK(problem.df(2.) == Approx(-0.0314917005));
+    CHECK(problem.f(2.) + t == Catch::Approx(0.1253217704));
+    CHECK(problem.df(2.) == Catch::Approx(-0.0314917005));
 
     const double p = math::solver::NewtonRaphson::findRoot(problem, 2.);
-    CHECK(p == Approx(2.0102571115));
+    CHECK(p == Catch::Approx(2.0102571115));
     const auto vs = problem.velocitiesAt(p);
-    CHECK(vs.first[0].value() == Approx(0.061861));
-    CHECK(vs.first[1].value() == Approx(1.00256));
-    CHECK(vs.first[2].value() == Approx(1.00256));
+    CHECK(vs.first[0].value() == Catch::Approx(0.061861));
+    CHECK(vs.first[1].value() == Catch::Approx(1.00256));
+    CHECK(vs.first[2].value() == Catch::Approx(1.00256));
 }
 
 TEST_CASE("Gauss problem 4")
@@ -295,13 +296,13 @@ TEST_CASE("Gauss problem 4")
     coordinates::Cartesian::Position r2{{0., -1., 0.}};
     GaussProblem problem{mu, r1, r2, true};
     problem.setTargetTime(t);
-    CHECK(problem.initialGuess() == Approx(1.0236648961));
-    CHECK(problem.f(problem.initialGuess()) + t == Approx(4.2541680127));
+    CHECK(problem.initialGuess() == Catch::Approx(1.0236648961));
+    CHECK(problem.f(problem.initialGuess()) + t == Catch::Approx(4.2541680127));
 
     const double p = math::solver::NewtonRaphson::findRoot(problem, problem.initialGuess());
-    CHECK(p == Approx(1.3282281153));
+    CHECK(p == Catch::Approx(1.3282281153));
     const auto vs = problem.velocitiesAt(p);
-    CHECK(vs.second[0].value() == Approx(0.66986992));
-    CHECK(vs.second[1].value() == Approx(0.48048471));
-    CHECK(vs.second[2].value() == Approx(0.93781789));
+    CHECK(vs.second[0].value() == Catch::Approx(0.66986992));
+    CHECK(vs.second[1].value() == Catch::Approx(0.48048471));
+    CHECK(vs.second[2].value() == Catch::Approx(0.93781789));
 }

@@ -2,7 +2,8 @@
 
 #include "utils/kepler_checks.h"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_vector.hpp>
 
 using namespace galaxias;
 using namespace orbit;
@@ -26,33 +27,33 @@ TEST_CASE("Elliptic construction")
 
     const double root = solver->solveForInternal(time1);
     const double guess = solver->initialGuess();
-    CHECK(guess == Approx(-0.000371181));
-    CHECK(solver->f(guess) == Approx(-2299.8885155579));
-    CHECK(solver->df(guess) == Approx(2798379.6021787832));
+    CHECK(guess == Catch::Approx(-0.000371181));
+    CHECK(solver->f(guess) == Catch::Approx(-2299.8885155579));
+    CHECK(solver->df(guess) == Catch::Approx(2798379.6021787832));
 
-    CHECK(root == Approx(0.0002836762));
-    CHECK(solver->f(root) == Approx(0.));
-    CHECK(solver->df(root) == Approx(1275954.2647539806));
+    CHECK(root == Catch::Approx(0.0002836762));
+    CHECK(solver->f(root) == Catch::Approx(0.));
+    CHECK(solver->df(root) == Catch::Approx(1275954.2647539806));
 
     const auto factors = solver->factorsAt(guess);
-    CHECK(factors.f == Approx(0.0028717009));
-    CHECK(factors.g == Approx(696.3567775155));
-    CHECK(factors.df == Approx(-0.001441273));
-    CHECK(factors.dg == Approx(-1.2676286066));
-    CHECK(factors.f * factors.dg - factors.df * factors.g == Approx(1.));
+    CHECK(factors.f == Catch::Approx(0.0028717009));
+    CHECK(factors.g == Catch::Approx(696.3567775155));
+    CHECK(factors.df == Catch::Approx(-0.001441273));
+    CHECK(factors.dg == Catch::Approx(-1.2676286066));
+    CHECK(factors.f * factors.dg - factors.df * factors.g == Catch::Approx(1.));
 
     const auto rootFactors = solver->factorsAt(root);
-    CHECK(rootFactors.f == Approx(-0.137545));
-    CHECK(rootFactors.g == Approx(433.682));
-    CHECK(rootFactors.df == Approx(-0.000823565));
-    CHECK(rootFactors.dg == Approx(-4.67363));
-    CHECK(rootFactors.f * rootFactors.dg - rootFactors.df * rootFactors.g == Approx(1.));
+    CHECK(rootFactors.f == Catch::Approx(-0.137545));
+    CHECK(rootFactors.g == Catch::Approx(433.682));
+    CHECK(rootFactors.df == Catch::Approx(-0.000823565));
+    CHECK(rootFactors.dg == Catch::Approx(-4.67363));
+    CHECK(rootFactors.f * rootFactors.dg - rootFactors.df * rootFactors.g == Catch::Approx(1.));
 
     // Period results in same guess
     CHECK(com.orbitalPeriod().low() == 0.);
-    CHECK(com.orbitalPeriod().high() == Approx(2192.6936220732));
-    CHECK(root == Approx(solver->solveForInternal(time1 - com.orbitalPeriod().high())));
-    CHECK(root == Approx(solver->solveForInternal(time1 + com.orbitalPeriod().high())));
+    CHECK(com.orbitalPeriod().high() == Catch::Approx(2192.6936220732));
+    CHECK(root == Catch::Approx(solver->solveForInternal(time1 - com.orbitalPeriod().high())));
+    CHECK(root == Catch::Approx(solver->solveForInternal(time1 + com.orbitalPeriod().high())));
 }
 
 TEST_CASE("Elliptic orbit")
@@ -187,31 +188,31 @@ TEST_CASE("Circular construction")
 
     const double root = solver->solveForInternal(time0);
     const double guess = solver->initialGuess();
-    CHECK(root == Approx(guess));
-    CHECK(root == Approx(0.0001699112));
-    CHECK(solver->f(root) == Approx(0.0));
-    CHECK(solver->df(root) == Approx(1000000.0));
+    CHECK(root == Catch::Approx(guess));
+    CHECK(root == Catch::Approx(0.0001699112));
+    CHECK(solver->f(root) == Catch::Approx(0.0));
+    CHECK(solver->df(root) == Catch::Approx(1000000.0));
 
     const auto factors = solver->factorsAt(root);
-    CHECK(factors.f == Approx(-0.9672505883));
-    CHECK(factors.g == Approx(-12.6911681381));
-    CHECK(factors.df == Approx(0.0050764673));
-    CHECK(factors.dg == Approx(-0.9672505883));
-    CHECK(factors.f * factors.dg - factors.df * factors.g == Approx(1.));
+    CHECK(factors.f == Catch::Approx(-0.9672505883));
+    CHECK(factors.g == Catch::Approx(-12.6911681381));
+    CHECK(factors.df == Catch::Approx(0.0050764673));
+    CHECK(factors.dg == Catch::Approx(-0.9672505883));
+    CHECK(factors.f * factors.dg - factors.df * factors.g == Catch::Approx(1.));
 
     // Period results in same guess
     CHECK(circular.orbitalPeriod().low() == 0.);
-    CHECK(circular.orbitalPeriod().high() == Approx(314.159265359));
-    CHECK(root == Approx(solver->solveForInternal(time0 - circular.orbitalPeriod().high())));
-    CHECK(root == Approx(solver->solveForInternal(time0 + circular.orbitalPeriod().high())));
+    CHECK(circular.orbitalPeriod().high() == Catch::Approx(314.159265359));
+    CHECK(root == Catch::Approx(solver->solveForInternal(time0 - circular.orbitalPeriod().high())));
+    CHECK(root == Catch::Approx(solver->solveForInternal(time0 + circular.orbitalPeriod().high())));
 
     // Norms are always the same
     for (double t = 0; t < circular.orbitalPeriod().high(); t += circular.orbitalPeriod().high() / 8.)
     {
         const auto coords = solver->coordinatesAt(qty::Second(time1 + t));
         const auto factors = solver->factorsAt(solver->computedS());
-        CHECK(factors.f * factors.dg - factors.df * factors.g == Approx(1.));
-        CHECK(coords.normPosition() == Approx(r));
-        CHECK(coords.normVelocity() == Approx(v));
+        CHECK(factors.f * factors.dg - factors.df * factors.g == Catch::Approx(1.));
+        CHECK(coords.normPosition() == Catch::Approx(r));
+        CHECK(coords.normVelocity() == Catch::Approx(v));
     }
 }

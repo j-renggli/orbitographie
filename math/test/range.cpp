@@ -1,6 +1,6 @@
 #include <math/range.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_template_test_macros.hpp>
 
 #include <stdexcept>
 

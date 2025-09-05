@@ -1,6 +1,6 @@
 #include <math/rng/shuffle.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <math/rng/prng.h>
 
 using namespace galaxias;

@@ -3,7 +3,9 @@
 #include "../../src/keplersolver/solver.h"
 #include <vector>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_vector.hpp>
 
 namespace galaxias
 {
@@ -42,11 +44,11 @@ struct Results
             CHECK(coords.velocity()[2].value() == 0.);
 
             // Ensure conservation of energy
-            CHECK(coords.position().cross(coords.velocity())[2].value() == Approx(h0));
+            CHECK(coords.position().cross(coords.velocity())[2].value() == Catch::Approx(h0));
         }
 
-        CHECK(s[6] * 1e25 == Approx(expected.s[6] * 1e25));
-        CHECK(vx[6] * 1e25 == Approx(expected.vx[6] * 1e25));
+        CHECK(s[6] * 1e25 == Catch::Approx(expected.s[6] * 1e25));
+        CHECK(vx[6] * 1e25 == Catch::Approx(expected.vx[6] * 1e25));
 
         CHECK_THAT(guess, Catch::Matchers::Approx(expected.guess));
         CHECK_THAT(s, Catch::Matchers::Approx(expected.s));

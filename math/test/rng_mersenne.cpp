@@ -2,7 +2,8 @@
 
 #include <math/range.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <deque>
 
@@ -31,11 +32,11 @@ TEST_CASE("Mersenne with seed")
     Mersenne m{42};
 
     // m produces deterministic outputs
-    CHECK(m.uniform(range) == Approx(17.5515553295));
+    CHECK(m.uniform(range) == Catch::Approx(17.5515553295));
     CHECK(m.uniform() == 11788048577503494824ull);
-    CHECK(m.gaussian<double>() == Approx(-0.5740948067));
-    CHECK(m.gaussian(10.) == Approx(8.0933146552));
-    CHECK(m.gaussian(-5., 0.3) == Approx(-5.2172368796));
+    CHECK(m.gaussian<double>() == Catch::Approx(-0.5740948067));
+    CHECK(m.gaussian(10.) == Catch::Approx(8.0933146552));
+    CHECK(m.gaussian(-5., 0.3) == Catch::Approx(-5.2172368796));
     CHECK(m.uniform(intRange) == 15);
 }
 

@@ -3,7 +3,8 @@
 
 #include <math/range.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <deque>
 
@@ -53,11 +54,11 @@ TEST_CASE("Realize function for fixed probabilities")
     ++fth;
     CHECK(*fth == 0.4);
     ++fth;
-    CHECK(*fth == Approx(0.05));
+    CHECK(*fth == Catch::Approx(0.05));
     ++fth;
-    CHECK(*fth == Approx(0.025));
+    CHECK(*fth == Catch::Approx(0.025));
     ++fth;
-    CHECK(*fth == Approx(0.0125));
+    CHECK(*fth == Catch::Approx(0.0125));
     ++fth;
 
     CHECK(detail::realise(FixThenHalve({0.2, 0.3, 0.4}), FixThenHalve<double>(), 0.) == 0);

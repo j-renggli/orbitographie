@@ -1,8 +1,10 @@
-project(galaxias)
-
 cmake_minimum_required(VERSION 3.18)
 
-set(CMAKE_CXX_STANDARD 20)
+project(galaxias)
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(
@@ -15,8 +17,8 @@ add_compile_options(
 
 include(GenerateExportHeader)
 
-find_package(Catch2)
-find_package(Eigen3)
+find_package(Catch2 REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 add_subdirectory(core)
 add_subdirectory(math)
