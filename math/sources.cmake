@@ -13,6 +13,7 @@ set(library_src
     include/${library_name}/colour/colour.h
 
     include/${library_name}/rng/fixed_proba.h
+    include/${library_name}/rng/poisson.h
     include/${library_name}/rng/prng.h
     include/${library_name}/rng/shuffle.h
 

@@ -3,8 +3,6 @@
 #include <math/solver/function.h>
 #include <orbit/centerofmass.h>
 
-#include <array>
-
 namespace galaxias
 {
 namespace orbit

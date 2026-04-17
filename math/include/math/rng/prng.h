@@ -55,6 +55,8 @@ template <class T>
 class PRNG
 {
 public:
+    using Generator = T;
+
     /// Construct an RNG with seed from system time
     PRNG()
         : PRNG{std::random_device{}()}
@@ -103,8 +105,11 @@ public:
         return detail::realise(std::move(it), end, x);
     }
 
+    Generator& generator() { return generator_; }
+    const Generator& generator() const { return generator_; }
+
 private:
-    T generator_;
+    Generator generator_;
 };
 
 using Mersenne = PRNG<std::mt19937_64>;

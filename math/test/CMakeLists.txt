@@ -6,6 +6,7 @@ set(library_src
     colour.cpp
 
     rng_mersenne.cpp
+    rng_poisson.cpp
     rng_realise.cpp
     rng_xoshiro.cpp
 
