@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(galaxias)
+project(orbitographie)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -31,9 +31,9 @@ set(library_src
 
 set_source_files_properties(.clang-format PROPERTIES HEADER_FILE_ONLY TRUE)
 
-add_executable(galaxias ${library_src})
+add_executable(orbitographie ${library_src})
 
-target_link_libraries(galaxias
+target_link_libraries(orbitographie
     math
     orbit
 )
