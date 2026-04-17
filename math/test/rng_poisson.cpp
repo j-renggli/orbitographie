@@ -19,7 +19,7 @@ constexpr size_t longCutoff{8};
 TEST_CASE("Poisson for 0")
 {
     const float zero = 0.f;
-    const auto poisson = generatePoisson(zero, cutoff);
+    const auto poisson = PoissonDistribution<float>::generate(zero, cutoff);
     REQUIRE(poisson.size() == cutoff);
     CHECK(poisson[0] == 1.f);
     for (size_t i = 1; i < cutoff; ++i)
@@ -32,20 +32,22 @@ TEST_CASE("Poisson for 1")
 {
     const double one = 1.;
     const double target = 0.367879;
-    const auto poisson = generatePoisson(one, cutoff);
-    REQUIRE(poisson.size() == cutoff);
-    CHECK_THAT(poisson[0], Catch::Matchers::WithinRel(target, 1e-5));
-    CHECK_THAT(poisson[1], Catch::Matchers::WithinRel(target, 1e-5));
-    CHECK_THAT(poisson[2], Catch::Matchers::WithinRel(target / 2., 1e-5));
-    CHECK_THAT(poisson[3], Catch::Matchers::WithinRel(target / 6., 1e-5));
-    CHECK_THAT(poisson[4], Catch::Matchers::WithinRel(target / 24., 1e-5));
+    PoissonDistribution<float> pd(one);
+    CHECK_THAT(*pd, Catch::Matchers::WithinRel(target, 1e-5));
+    double fact = 1.;
+    for (size_t i = 1; i < 20; ++i)
+    {
+        ++pd;
+        fact *= static_cast<double>(i);
+        CHECK_THAT((*pd), Catch::Matchers::WithinRel(target / fact, 1e-5));
+    }
 }
 
 TEST_CASE("Poisson for 2")
 {
     const double two = 2.;
     const double target = 0.27067;
-    const auto poisson = generatePoisson(two, longCutoff);
+    const auto poisson = PoissonDistribution<float>::generate(two, longCutoff);
     REQUIRE(poisson.size() == longCutoff);
     CHECK_THAT(poisson[0], Catch::Matchers::WithinRel(target / 2, 1e-5));
     CHECK_THAT(poisson[1], Catch::Matchers::WithinRel(target, 1e-5));
@@ -59,16 +61,16 @@ TEST_CASE("Poisson for 2")
 
 TEST_CASE("Poisson for 2 and half")
 {
-    const double twoHalf = 2.5;
-    const double target = 0.2565156;
-    const auto poisson = generatePoisson(twoHalf, longCutoff);
+    const float twoHalf = 2.5;
+    const float target = 0.2565156;
+    const auto poisson = PoissonDistribution<float>::generate(twoHalf, longCutoff);
     REQUIRE(poisson.size() == longCutoff);
-    CHECK_THAT(poisson[0], Catch::Matchers::WithinRel(target / 3.125, 1e-5));
-    CHECK_THAT(poisson[1], Catch::Matchers::WithinRel(target / 1.25, 1e-5));
-    CHECK_THAT(poisson[2], Catch::Matchers::WithinRel(target, 1e-5));
-    CHECK_THAT(poisson[3], Catch::Matchers::WithinRel(target / 1.2, 1e-5));
-    CHECK_THAT(poisson[4], Catch::Matchers::WithinRel(target / 1.92, 1e-5));
-    CHECK_THAT(poisson[5], Catch::Matchers::WithinRel(target / 3.84, 1e-5));
-    CHECK_THAT(poisson[6], Catch::Matchers::WithinRel(target / 9.216, 1e-5));
-    CHECK_THAT(poisson[7], Catch::Matchers::WithinRel(target / 25.8048, 1e-5));
+    CHECK_THAT(poisson[0], Catch::Matchers::WithinRel(target / 3.125f, 1e-5f));
+    CHECK_THAT(poisson[1], Catch::Matchers::WithinRel(target / 1.25f, 1e-5f));
+    CHECK_THAT(poisson[2], Catch::Matchers::WithinRel(target, 1e-5f));
+    CHECK_THAT(poisson[3], Catch::Matchers::WithinRel(target / 1.2f, 1e-5f));
+    CHECK_THAT(poisson[4], Catch::Matchers::WithinRel(target / 1.92f, 1e-5f));
+    CHECK_THAT(poisson[5], Catch::Matchers::WithinRel(target / 3.84f, 1e-5f));
+    CHECK_THAT(poisson[6], Catch::Matchers::WithinRel(target / 9.216f, 1e-5f));
+    CHECK_THAT(poisson[7], Catch::Matchers::WithinRel(target / 25.8048f, 1e-5f));
 }
