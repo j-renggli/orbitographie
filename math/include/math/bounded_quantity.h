@@ -15,6 +15,8 @@ namespace quantity
 template <class T, class U>
 struct BoundedQuantity : public Quantity<T, U>
 {
+    using Base = Quantity<T, U>;
+
     constexpr BoundedQuantity(const Quantity<T, U>& qty,
                               const Range<double>& range = Range<double>(-std::numeric_limits<double>::max(),
                                                                          std::numeric_limits<double>::max()))

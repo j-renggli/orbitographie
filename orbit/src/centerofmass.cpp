@@ -110,13 +110,9 @@ CenterOfMass::CenterOfMass(const GravitationalParam& mu,
     {
         orbitType_ = OrbitType::Parabolic;
     }
-
-    solver_ = UniversalKeplerSolver::create(*this);
 }
 
 CenterOfMass::~CenterOfMass() = default;
-
-coordinates::Cartesian CenterOfMass::coordinatesAt(const qty::Second& t) const { return solver_->coordinatesAt(t); }
 
 math::Range<double> CenterOfMass::orbitalPeriod() const
 {
