@@ -58,6 +58,8 @@ TEST_CASE("Xoshiro with seed")
     CHECK(m.gaussian(10.) == Catch::Approx(9.7031224002));
     CHECK(m.gaussian(-5., 0.3) == Catch::Approx(-5.1379749829));
     CHECK(m.uniform(intRange) == 22);
+    CHECK(m.gamma(1., 1.) == Catch::Approx(2.11308086130961881));
+    CHECK(m.gamma(4.75, 0.2) == Catch::Approx(1.56048225208235403));
 }
 
 TEST_CASE("Xoshiro from existing and mask")

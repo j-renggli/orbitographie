@@ -33,6 +33,8 @@ set_source_files_properties(.clang-format PROPERTIES HEADER_FILE_ONLY TRUE)
 
 add_executable(orbitographie ${library_src})
 
+set_property(TARGET orbitographie PROPERTY COMPILE_WARNING_AS_ERROR ON)
+
 target_link_libraries(orbitographie
     math
     orbit

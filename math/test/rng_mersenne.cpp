@@ -38,6 +38,17 @@ TEST_CASE("Mersenne with seed")
     CHECK(m.gaussian(10.) == Catch::Approx(8.0933146552));
     CHECK(m.gaussian(-5., 0.3) == Catch::Approx(-5.2172368796));
     CHECK(m.uniform(intRange) == 15);
+    CHECK(m.gamma(1., 1.) == Catch::Approx(3.91177242184738549));
+    CHECK(m.gamma(4.75, 0.2) == Catch::Approx(0.75500807216949284));
+}
+
+TEST_CASE("Gamma function is always positive")
+{
+    Mersenne m{42};
+    for (size_t i = 0; i < 100; ++i)
+    {
+        REQUIRE(m.gamma(1., 1.) > 0.);
+    }
 }
 
 TEST_CASE("Mersenne from existing and mask")

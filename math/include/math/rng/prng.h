@@ -81,8 +81,8 @@ public:
         return std::uniform_int_distribution<>{static_cast<int>(range.low()),
                                                static_cast<int>(range.high())}(generator_);
     }
-    template <class F, std::enable_if_t<std::is_floating_point<F>::value, bool> = true>
-    F uniform(const Range<F>& range)
+    template <class R, std::enable_if_t<std::is_floating_point<R>::value, bool> = true>
+    R uniform(const Range<R>& range)
     {
         return std::uniform_real_distribution<>{static_cast<double>(range.low()),
                                                 static_cast<double>(range.high())}(generator_);
@@ -93,6 +93,13 @@ public:
     R gaussian(const R& mean = 0., const R& stddev = 1.)
     {
         return std::normal_distribution<>{mean, stddev}(generator_);
+    }
+
+    /// Return a value following a gamma distribution
+    template <class R>
+    R gamma(const R& shape = 0., const R& scale = 1.)
+    {
+        return std::gamma_distribution<>{shape, scale}(generator_);
     }
 
     /// Given a discrete probability distribution through iterator, returns one realisation
