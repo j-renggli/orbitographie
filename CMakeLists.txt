@@ -11,7 +11,9 @@ add_compile_options(
     -g
     -pedantic
     -Wall
+    -Werror=switch
     -Wextra
+    -Wswitch
     -fPIC
 )
 
