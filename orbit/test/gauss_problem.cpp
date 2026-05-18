@@ -10,6 +10,8 @@ using namespace galaxias;
 using namespace orbit;
 using namespace coordinates;
 
+namespace ratio = math::unit::ratio;
+
 class GaussProblem : public math::solver::IFunction
 {
 protected:

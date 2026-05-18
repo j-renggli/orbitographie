@@ -84,7 +84,7 @@ CenterOfMass::CenterOfMass(const GravitationalParam& mu,
                            const qty::Second& time0,
                            const coordinates::Cartesian& coord0,
                            const std::shared_ptr<CenterOfMass>& parent)
-    : mu_{mu, math::Range<double>::positive()}
+    : mu_{mu}
     , t0_{time0}
     , coord0_{coord0}
     , oe_{deduceElements(parent ? parent->mu_ : mu_, coord0_.position(), coord0_.velocity())}

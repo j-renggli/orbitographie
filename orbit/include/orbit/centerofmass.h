@@ -14,7 +14,7 @@ namespace orbit
 namespace qty = math::quantity;
 
 using GravitationalParam =
-    qty::BoundedQuantity<double, math::unit::Unit<math::unit::ratio::NegTwo, math::unit::ratio::Three>>;
+    qty::BoundedQuantity<double, math::unit::Unit<math::unit::ratio::NegTwo, math::unit::ratio::Three>, 0.>;
 
 class CenterOfMass
 {
@@ -26,6 +26,10 @@ public:
     CenterOfMass(const GravitationalParam& mu,
                  const qty::Second& time0,
                  const coordinates::Cartesian& coord0,
+                 const std::shared_ptr<CenterOfMass>& parent);
+    CenterOfMass(const GravitationalParam& mu,
+                 const qty::Second& time0,
+                 const OrbitalElements& oe,
                  const std::shared_ptr<CenterOfMass>& parent);
     virtual ~CenterOfMass();
 

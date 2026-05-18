@@ -26,9 +26,9 @@ std::ostream& operator<<(std::ostream& out, const Cartesian& cartesian)
     return out;
 }
 
-GalactoCentric::GalactoCentric(const math::quantity::Radian& angle,
-                               const math::quantity::Metre& radius,
-                               const math::quantity::Metre& height)
+GalactoCentric::GalactoCentric(const qty::angle::FullRadian& angle,
+                               const qty::positive::Metre& radius,
+                               const qty::Metre& height)
     : angle_{angle}
     , radius_{radius}
     , height_{height}

@@ -7,16 +7,16 @@ namespace galaxias
 namespace orbit
 {
 
-OrbitalElements::OrbitalElements(const qty::Unitless& eccentricity,
-                                 const qty::PerMetre& alpha,
-                                 const qty::Radian& inclination,
-                                 const qty::Radian& longitude,
-                                 const qty::Radian& periapsis)
-    : eccentricity_{eccentricity, math::Range<double>::positive()}
+OrbitalElements::OrbitalElements(const Eccentricity& eccentricity,
+                                 const SemiMajorAxis& alpha,
+                                 const angle::HalfRadian& inclination,
+                                 const angle::FullRadian& longitude,
+                                 const angle::FullRadian& periapsis)
+    : eccentricity_{eccentricity}
     , alpha_{alpha}
-    , inclination_{qty::BoundedRadian::fromModulo(inclination, math::Range<double>{0., M_PI})}
-    , longitude_{qty::BoundedRadian::fromModulo(longitude, math::Range<double>::radians())}
-    , periapsis_{qty::BoundedRadian::fromModulo(periapsis, math::Range<double>::radians())}
+    , inclination_{inclination}
+    , longitude_{longitude}
+    , periapsis_{periapsis}
 {
 }
 
