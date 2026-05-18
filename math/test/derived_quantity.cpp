@@ -11,6 +11,7 @@ using namespace quantity;
 namespace
 {
 
+constexpr double hundred = 100.;
 constexpr Range<double> pm_hundred{-100., 100.};
 
 constexpr double factor{3.14159};
@@ -25,11 +26,11 @@ public:
     }
 };
 
-class MyBoundedQty : public DerivedQuantity<BoundedQuantity<double, math::unit::Unit<math::unit::ratio::One>>>
+class MyBoundedQty : public DerivedQuantity<BoundedQuantity<double, math::unit::Second, -hundred, hundred>>
 {
 public:
     MyBoundedQty(double x)
-        : DerivedQuantity(x, factor, pm_hundred)
+        : DerivedQuantity(x, factor)
     {
     }
 };

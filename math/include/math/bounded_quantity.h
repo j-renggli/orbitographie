@@ -12,16 +12,26 @@ namespace math
 namespace quantity
 {
 
-template <class T, class U>
+template <class T, class U, T min, T max = std::numeric_limits<T>::max()>
 struct BoundedQuantity : public Quantity<T, U>
 {
     using Base = Quantity<T, U>;
+    static constexpr T limitMin = min;
+    static constexpr T limitMax = max;
 
-    constexpr BoundedQuantity(const Quantity<T, U>& qty,
-                              const Range<double>& range = Range<double>(-std::numeric_limits<double>::max(),
-                                                                         std::numeric_limits<double>::max()))
+    constexpr BoundedQuantity(const T& value)
+        : Quantity<T, U>{value}
+        , range_{limitMin, limitMax}
+    {
+        if (!std::isnan(value) && !range_.includes(value))
+        {
+            throw std::runtime_error("Out of bounds " + std::to_string(range_.low()) +
+                                     " <= " + std::to_string(this->value()) + " <= " + std::to_string(range_.high()));
+        }
+    }
+    constexpr BoundedQuantity(const Quantity<T, U>& qty)
         : Quantity<T, U>{qty}
-        , range_{range}
+        , range_{limitMin, limitMax}
     {
         if (!std::isnan(qty.value()) && !range_.includes(qty.value()))
         {
@@ -40,37 +50,33 @@ struct BoundedQuantity : public Quantity<T, U>
     BoundedQuantity& operator=(const BoundedQuantity& rhs) = default;
     BoundedQuantity& operator=(BoundedQuantity&& rhs) = default;
 
-    static BoundedQuantity fromModulo(const Quantity<T, U>& value, const Range<double>& range)
-    {
-        return BoundedQuantity{range.modulo(value.value()), range};
-    }
-
-    const Range<double>& range() const { return range_; }
+    static Range<T> range() { return Range<T>{limitMin, limitMax}; }
 
 private:
-    Range<double> range_;
+    const Range<T> range_;
 };
 
-// Unitless
-using BoundedUnitless = BoundedQuantity<double, unit::Unitless>;
-using BoundedRadian = BoundedQuantity<double, unit::Unitless>;
+// Quantities can often only take positive values
+namespace positive
+{
 
-// Time
-using BoundedSecond = BoundedQuantity<double, unit::Second>;
-using BoundedFrequency = BoundedQuantity<double, unit::Frequency>;
+using Second = BoundedQuantity<double, unit::Second, 0.>;
+using Metre = BoundedQuantity<double, unit::Metre, 0.>;
+using Kilogram = BoundedQuantity<double, unit::Kilogram, 0.>;
+using Watt = BoundedQuantity<double, unit::Watt, 0.>;
+using Kelvin = BoundedQuantity<double, unit::Kelvin, 0.>;
 
-// Length
-using BoundedMetre = BoundedQuantity<double, unit::Metre>;
+} // namespace positive
 
-// Mass
-using BoundedKilogram = BoundedQuantity<double, unit::Kilogram>;
+// Angles only have meaning between specific values, since they are cyclic
+namespace angle
+{
 
-// Temperature
-using BoundedKelvin = BoundedQuantity<double, unit::Kelvin>;
+using FullRadian = BoundedQuantity<double, unit::Unitless, 0., 2 * M_PI>;
+using HalfRadian = BoundedQuantity<double, unit::Unitless, 0., M_PI>;
+using PrincipalRadian = BoundedQuantity<double, unit::Unitless, -M_PI, M_PI>;
 
-// Composite
-using BoundedVelocity = BoundedQuantity<double, unit::Velocity>;
-using BoundedWatt = BoundedQuantity<double, unit::Watt>;
+} // namespace angle
 
 } // namespace quantity
 } // namespace math
