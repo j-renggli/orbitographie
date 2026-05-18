@@ -47,6 +47,8 @@ std::unique_ptr<UniversalKeplerSolver> UniversalKeplerSolver::create(const Cente
         throw std::logic_error("Degenerate case not solvable yet");
     }
     };
+
+    __builtin_unreachable();
 }
 
 void UniversalKeplerSolver::setTargetTime(const qty::Second& targetTime) { h_ = targetTime.value() - t0_; }
