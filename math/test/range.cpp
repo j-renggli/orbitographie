@@ -28,6 +28,7 @@ TEMPLATE_TEST_CASE("Range constructor", "[range]", int, double)
     CHECK(r.low() == lo);
     CHECK(r.mid() == mid);
     CHECK(r.high() == hi);
+    CHECK(r.range() == hi - lo);
 
     CHECK_FALSE(r.includes(0));
     CHECK(r.includes(1));
@@ -59,4 +60,28 @@ TEMPLATE_TEST_CASE("Using ranges", "[range]", int, double)
         r.modulo(m);
         CHECK(m == modulo[i]);
     }
+}
+
+TEST_CASE("Modulo", "[range]")
+{
+    const auto r = Range<double>::radians();
+    CHECK(r.modulo(0.) == 0.);
+    CHECK(r.modulo(1.) == 1.);
+    CHECK(r.modulo(r.range()) == 0.);
+    CHECK(r.modulo(-42.) == -42. + 7. * r.range());
+    CHECK(r.modulo(-2.6) == -2.6 + r.range());
+    CHECK(r.modulo(8.) == 8. - r.range());
+    CHECK(r.modulo(99.) == 99. - 15. * r.range());
+
+    constexpr double lo{3.1};
+    constexpr double mi{4.};
+    constexpr double hi{6.2};
+    const Range<double> rx{lo, hi};
+    CHECK(rx.modulo(lo) == lo);
+    CHECK(rx.modulo(mi) == mi);
+    CHECK(rx.modulo(hi) == lo);
+    CHECK(rx.modulo(-42.) == -42. + 15. * rx.range());
+    CHECK(rx.modulo(-2.6) == -2.6 + 2. * rx.range());
+    CHECK(rx.modulo(8.) == 8. - rx.range());
+    CHECK(rx.modulo(99.) == 99. - 30. * rx.range());
 }

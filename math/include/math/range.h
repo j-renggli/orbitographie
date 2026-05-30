@@ -37,6 +37,7 @@ public:
     const T& low() const noexcept { return lo_; }
     const T& high() const noexcept { return hi_; }
     T mid() const noexcept { return (lo_ + hi_) * 0.5; }
+    const T range() const noexcept { return hi_ - lo_; }
 
     bool includes(const T& value) const;
 

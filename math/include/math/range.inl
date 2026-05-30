@@ -35,6 +35,11 @@ T Range<T>::clamp(const T& value) const
 template <class T>
 void Range<T>::modulo(T& value) const
 {
+    if (value >= lo_ && value < hi_)
+    {
+        return;
+    }
+
     const double diff = hi_ - lo_;
     double n = 0;
     if (value > hi_)
