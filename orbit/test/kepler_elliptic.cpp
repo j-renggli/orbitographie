@@ -178,7 +178,7 @@ TEST_CASE("Circular construction")
     const CenterOfMass circular(GravitationalParam{mu2}, time1, Cartesian{{{0., r, 0.}}, {{v, 0., 0.}}}, nullptr);
     CHECK(circular.orbitalElements().eccentricity_.value() == 0.);
     CHECK(circular.orbitalElements().alpha_.value() == 1. / r);
-    CHECK(circular.orbitalElements().inclination_.value() == 0.);
+    CHECK(circular.orbitalElements().inclination_.value() == Catch::Approx(M_PI));
     CHECK(circular.orbitalElements().longitude_.value() == 0.);
     CHECK(circular.orbitalElements().periapsis_.value() == 0.);
     REQUIRE(circular.orbitType() == CenterOfMass::OrbitType::Circular);

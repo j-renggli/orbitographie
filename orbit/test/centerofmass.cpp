@@ -49,7 +49,7 @@ TEST_CASE("Center of mass")
         INFO("Example 3");
         constexpr double x = 4500000.;
         CenterOfMass com(mu, time0, Cartesian{{{-x, x, 0.}}, {{0., 4000., 0.}}}, nullptr);
-        checkOrbitalElements(com.orbitalElements(), 0.881576, 0.274129233297e-6, 0., 0., 0.9307937946);
+        checkOrbitalElements(com.orbitalElements(), 0.881576, 0.274129233297e-6, pi, 0., 0.9307937946);
     }
     {
         INFO("Example 4");

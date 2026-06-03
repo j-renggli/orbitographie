@@ -21,6 +21,7 @@ class Cartesian
 public:
     using Position = qty::Quantity<Vector, math::unit::Metre>;
     using Velocity = qty::Quantity<Vector, math::unit::Velocity>;
+    using SAM = qty::Quantity<Vector, math::unit::Unit<math::unit::ratio::NegOne, math::unit::ratio::Two>>;
 
     Cartesian(const Position& position, const Velocity& velocity);
     static Cartesian zero();
@@ -29,6 +30,7 @@ public:
     double normPosition() const { return r_.value().norm(); }
     const Velocity& velocity() const { return v_; }
     double normVelocity() const { return v_.value().norm(); }
+    const SAM specificAngularMomentum() const { return r_.cross(v_); }
 
     friend std::ostream& operator<<(std::ostream& out, const Cartesian& cartesian);
 

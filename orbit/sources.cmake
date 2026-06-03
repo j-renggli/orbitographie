@@ -9,6 +9,8 @@ set(library_src
 
 set(object_library_src
     src/centerofmass.cpp
+    src/orbit_helper.cpp
+    src/orbit_helper.h
     src/orbital_elements.cpp
     src/position.cpp
 

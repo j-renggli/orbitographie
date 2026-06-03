@@ -8,6 +8,7 @@ set(library_src
     kepler_elliptic.cpp
     kepler_hyperbolic.cpp
     kepler_parabolic.cpp
+    orbit_helper.cpp
     position.cpp
 
     utils/kepler_checks.h
