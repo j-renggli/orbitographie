@@ -5,6 +5,7 @@ set(library_src
     include/${library_name}/centerofmass.h
     include/${library_name}/orbital_elements.h
     include/${library_name}/position.h
+    include/${library_name}/universal_kepler_solver.h
 )
 
 set(object_library_src

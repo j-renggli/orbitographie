@@ -11,18 +11,20 @@ using namespace coordinates;
 
 namespace
 {
+
 const GravitationalParam mu{3.986004418e14};
 constexpr double t0{0.};
 constexpr qty::Second time0{t0};
 constexpr qty::Second time1{t0 + 3600.};
-const CenterOfMass com(mu, time0, Cartesian{{{-4500000., 4500000., 0.}}, {{0., 4000., 0.}}}, nullptr);
+const CenterOfMass com(mu, time0, Cartesian{{{-4500000., 4500000., 0.}}, {{0., 4000., 0.}}});
+
 } // namespace
 
 TEST_CASE("Elliptic construction")
 {
     REQUIRE(com.orbitType() == CenterOfMass::OrbitType::Elliptic);
 
-    auto solver = UniversalKeplerSolver::create(com);
+    auto solver = UniversalKeplerSolver::create(CenterOfMass{com});
     REQUIRE(dynamic_cast<EllipticKeplerSolver*>(solver.get()) != nullptr);
 
     const double root = solver->solveForInternal(time1);
@@ -162,7 +164,7 @@ TEST_CASE("Elliptic orbit")
         -3452.14,
     };
 
-    auto solver = UniversalKeplerSolver::create(com);
+    auto solver = UniversalKeplerSolver::create(CenterOfMass{com});
 
     const auto c0 = com.initialCoordinates();
     const double h0 = c0.position().cross(c0.velocity())[2].value();
@@ -175,7 +177,7 @@ TEST_CASE("Circular construction")
     constexpr double mu2{4e14};
     constexpr double r = 1e6;
     const double v = sqrt(mu2 * r) / r;
-    const CenterOfMass circular(GravitationalParam{mu2}, time1, Cartesian{{{0., r, 0.}}, {{v, 0., 0.}}}, nullptr);
+    const CenterOfMass circular(GravitationalParam{mu2}, time1, Cartesian{{{0., r, 0.}}, {{v, 0., 0.}}});
     CHECK(circular.orbitalElements().eccentricity_.value() == 0.);
     CHECK(circular.orbitalElements().alpha_.value() == 1. / r);
     CHECK(circular.orbitalElements().inclination_.value() == Catch::Approx(M_PI));
@@ -183,7 +185,7 @@ TEST_CASE("Circular construction")
     CHECK(circular.orbitalElements().periapsis_.value() == 0.);
     REQUIRE(circular.orbitType() == CenterOfMass::OrbitType::Circular);
 
-    auto solver = UniversalKeplerSolver::create(circular);
+    auto solver = UniversalKeplerSolver::create(CenterOfMass{circular});
     REQUIRE(dynamic_cast<EllipticKeplerSolver*>(solver.get()) != nullptr);
 
     const double root = solver->solveForInternal(time0);

@@ -10,18 +10,20 @@ using namespace coordinates;
 
 namespace
 {
+
 const GravitationalParam mu{3.986004418e14};
 constexpr double t0{0.};
 constexpr qty::Second time0{t0};
 constexpr qty::Second time1{t0 + 3600.};
-const CenterOfMass com(mu, time0, Cartesian{{{1e9, 0., 0.}}, {{0., 1e6, 0.}}}, nullptr);
+const CenterOfMass com(mu, time0, Cartesian{{{1e9, 0., 0.}}, {{0., 1e6, 0.}}});
+
 } // namespace
 
 TEST_CASE("Hyperbolic construction")
 {
     REQUIRE(com.orbitType() == CenterOfMass::OrbitType::Hyperbolic);
 
-    auto solver = UniversalKeplerSolver::create(com);
+    auto solver = UniversalKeplerSolver::create(CenterOfMass{com});
     REQUIRE(dynamic_cast<HyperbolicKeplerSolver*>(solver.get()) != nullptr);
 
     const double root = solver->solveForInternal(time1);
@@ -156,7 +158,7 @@ TEST_CASE("Hyperbolic orbit")
         -0.0126570065,
     };
 
-    auto solver = UniversalKeplerSolver::create(com);
+    auto solver = UniversalKeplerSolver::create(CenterOfMass{com});
 
     const auto c0 = com.initialCoordinates();
     const double h0 = c0.position().cross(c0.velocity())[2].value();

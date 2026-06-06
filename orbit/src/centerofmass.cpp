@@ -126,33 +126,33 @@ CenterOfMass::OrbitType deduceOrbitType(const Eccentricity& eccentricity, const 
 } // namespace
 
 CenterOfMass::CenterOfMass(const GravitationalParam& mu)
-    : CenterOfMass{mu, 0., coordinates::Cartesian::zero(), nullptr}
+    : CenterOfMass{mu, 0., coordinates::Cartesian::zero()}
 {
 }
 
 CenterOfMass::CenterOfMass(const GravitationalParam& mu,
                            const qty::Second& time0,
                            const coordinates::Cartesian& coord0,
-                           const std::shared_ptr<CenterOfMass>& parent)
+                           std::optional<GravitationalParam> parentMu)
     : mu_{mu}
+    , parentMu_{parentMu ? *parentMu : mu_}
     , t0_{time0}
     , coord0_{coord0}
-    , oe_{deduceElements(coord0_.position(), coord0_.velocity(), parent ? parent->mu_ : mu_)}
+    , oe_{deduceElements(coord0_.position(), coord0_.velocity(), parentMu_)}
     , orbitType_{deduceOrbitType(oe_.eccentricity_, coord0_)}
-    , parent_{parent}
 {
 }
 
 CenterOfMass::CenterOfMass(const GravitationalParam& mu,
                            const qty::Second& time0,
                            const OrbitalElements& oe,
-                           const std::shared_ptr<CenterOfMass>& parent)
+                           std::optional<GravitationalParam> parentMu)
     : mu_{mu}
+    , parentMu_{parentMu ? *parentMu : mu_}
     , t0_{time0}
-    , coord0_{deduceCoord0(oe, parent ? parent->mu_ : mu_)}
+    , coord0_{deduceCoord0(oe, parentMu_)}
     , oe_{oe}
     , orbitType_{deduceOrbitType(oe_.eccentricity_, coord0_)}
-    , parent_{parent}
 {
 }
 
@@ -165,7 +165,7 @@ math::Range<double> CenterOfMass::orbitalPeriod() const
         throw std::runtime_error("Orbital period is only defined for elliptical (circular) case");
     }
 
-    const qty::Frequency freq{(oe_.alpha_.pow<3>() * (parent_ ? parent_->mu_ : mu_)).root<2>()};
+    const qty::Frequency freq{(oe_.alpha_.pow<3>() * parentMu_).root<2>()};
     return math::Range<double>{0., two_pi / freq.value()};
 }
 

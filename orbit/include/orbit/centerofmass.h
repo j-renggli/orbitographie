@@ -2,9 +2,9 @@
 
 #include "orbital_elements.h"
 #include "position.h"
+#include "quantities.h"
+#include "universal_kepler_solver.h"
 #include <math/bounded_quantity.h>
-
-#include <memory>
 
 namespace galaxias
 {
@@ -13,30 +13,28 @@ namespace orbit
 
 namespace qty = math::quantity;
 
-using GravitationalParam =
-    qty::BoundedQuantity<double, math::unit::Unit<math::unit::ratio::NegTwo, math::unit::ratio::Three>, 0.>;
-
 class CenterOfMass
 {
 public:
-    CenterOfMass();
+    CenterOfMass() = delete;
     CenterOfMass(const CenterOfMass&) = default;
     CenterOfMass(CenterOfMass&&) noexcept = default;
     CenterOfMass(const GravitationalParam& mu);
     CenterOfMass(const GravitationalParam& mu,
                  const qty::Second& time0,
                  const coordinates::Cartesian& coord0,
-                 const std::shared_ptr<CenterOfMass>& parent);
+                 std::optional<GravitationalParam> parent = std::nullopt);
     CenterOfMass(const GravitationalParam& mu,
                  const qty::Second& time0,
                  const OrbitalElements& oe,
-                 const std::shared_ptr<CenterOfMass>& parent);
+                 std::optional<GravitationalParam> parent = std::nullopt);
+
     virtual ~CenterOfMass();
 
     CenterOfMass& operator=(const CenterOfMass&) = default;
     CenterOfMass& operator=(CenterOfMass&&) noexcept = default;
 
-    const GravitationalParam& mu() const { return mu_; }
+    const GravitationalParam& gravitationalParam() const { return mu_; }
     const qty::Second& initialTime() const { return t0_; }
 
     const coordinates::Cartesian& initialCoordinates() const { return coord0_; }
@@ -60,11 +58,11 @@ public:
 
 private:
     GravitationalParam mu_;
+    GravitationalParam parentMu_;
     qty::Second t0_;
     coordinates::Cartesian coord0_;
     OrbitalElements oe_;
     OrbitType orbitType_;
-    std::shared_ptr<CenterOfMass> parent_;
 };
 
 } // namespace orbit

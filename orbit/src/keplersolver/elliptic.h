@@ -10,8 +10,8 @@ namespace orbit
 class EllipticKeplerSolver : public UniversalKeplerSolver
 {
 public:
-    EllipticKeplerSolver(const CenterOfMass& com)
-        : UniversalKeplerSolver{com}
+    EllipticKeplerSolver(CenterOfMass&& com)
+        : UniversalKeplerSolver{std::move(com)}
         , period_{com.orbitalPeriod()}
     {
     }

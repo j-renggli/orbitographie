@@ -13,18 +13,21 @@ namespace orbit
 /// A fast and accurate universal Kepler solver without Stumpff series.
 /// \mnras. 2015;453 (3) :3015-3023.
 
-class UniversalKeplerSolver : public math::solver::IFunction
+class UniversalKeplerSolver : public IUniversalKeplerSolver
 {
 public:
-    UniversalKeplerSolver(const CenterOfMass& com);
+    UniversalKeplerSolver(CenterOfMass&& com);
 
     virtual ~UniversalKeplerSolver() {}
 
     /// Create an appropriate solver for the given initial conditions
-    static std::unique_ptr<UniversalKeplerSolver> create(const CenterOfMass& com);
+    static std::unique_ptr<UniversalKeplerSolver> create(CenterOfMass&& com);
 
     /// Return the coordinates at time t
-    coordinates::Cartesian coordinatesAt(const qty::Second& targetTime);
+    coordinates::Cartesian coordinatesAt(const qty::Second& targetTime) override;
+
+    /// Return the center of mass
+    const CenterOfMass& centerOfMass() const override { return com_; }
 
 public:
     /// Get the value of s for the provided target time
@@ -52,7 +55,7 @@ private:
     virtual math::Range<double> bisectionRange() const = 0;
 
 protected:
-    const CenterOfMass& com_;
+    CenterOfMass com_;
     double r0_;
     double rdotv_;
     double k_;

@@ -53,7 +53,7 @@ struct BoundedQuantity : public Quantity<T, U>
     static Range<T> range() { return Range<T>{limitMin, limitMax}; }
 
 private:
-    const Range<T> range_;
+    Range<T> range_;
 };
 
 // Quantities can often only take positive values

@@ -13,34 +13,41 @@ namespace galaxias
 namespace orbit
 {
 
-UniversalKeplerSolver::UniversalKeplerSolver(const CenterOfMass& com)
-    : com_{com}
-    , r0_{com.initialPosition().norm().value()}
-    , rdotv_{com.initialPosition().dot(com.initialVelocity()).value()}
-    , k_{com.mu().value()}
-    , beta_{k_ * com.orbitalElements().alpha_.value()}
+std::unique_ptr<IUniversalKeplerSolver> IUniversalKeplerSolver::create(CenterOfMass&& com)
+{
+    return UniversalKeplerSolver::create(std::move(com));
+}
+
+////////////////////////////////////////////////////////////////
+
+UniversalKeplerSolver::UniversalKeplerSolver(CenterOfMass&& com)
+    : com_{std::move(com)}
+    , r0_{com_.initialPosition().norm().value()}
+    , rdotv_{com_.initialPosition().dot(com_.initialVelocity()).value()}
+    , k_{com_.gravitationalParam().value()}
+    , beta_{k_ * com_.orbitalElements().alpha_.value()}
     , sb_{sqrt(std::abs(beta_))}
-    , t0_{com.initialTime().value()}
+    , t0_{com_.initialTime().value()}
     , h_{std::numeric_limits<double>::quiet_NaN()}
 {
 }
 
-std::unique_ptr<UniversalKeplerSolver> UniversalKeplerSolver::create(const CenterOfMass& com)
+std::unique_ptr<UniversalKeplerSolver> UniversalKeplerSolver::create(CenterOfMass&& com)
 {
     switch (com.orbitType())
     {
     case CenterOfMass::OrbitType::Circular:
     case CenterOfMass::OrbitType::Elliptic:
-        return std::make_unique<EllipticKeplerSolver>(com);
+        return std::make_unique<EllipticKeplerSolver>(std::move(com));
     case CenterOfMass::OrbitType::Parabolic:
-        return std::make_unique<ParabolicKeplerSolver>(com);
+        return std::make_unique<ParabolicKeplerSolver>(std::move(com));
     case CenterOfMass::OrbitType::Hyperbolic:
-        return std::make_unique<HyperbolicKeplerSolver>(com);
+        return std::make_unique<HyperbolicKeplerSolver>(std::move(com));
     case CenterOfMass::OrbitType::Degenerate:
     {
         if (com.initialPosition().squaredNorm().value() + com.initialVelocity().squaredNorm().value() == 0.)
         {
-            return std::make_unique<ZeroKeplerSolver>(com);
+            return std::make_unique<ZeroKeplerSolver>(std::move(com));
         }
 
         // TODO: Implement!
