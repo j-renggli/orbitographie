@@ -13,15 +13,65 @@ namespace qty = math::quantity;
 
 using Vector = Eigen::Vector3d;
 
+namespace position
+{
+
+using Cartesian = qty::Quantity<Vector, math::unit::Metre>;
+
+class Cylindrical
+{
+public:
+    Cylindrical(const qty::positive::Metre& radius_ = 0.,
+                const qty::angle::FullRadian& angle_ = 0.,
+                const qty::Metre& height_ = 0.)
+        : radius{radius_}
+        , angle{angle_}
+        , height{height_}
+    {
+    }
+    Cylindrical(const Cylindrical&) = default;
+    Cylindrical(Cylindrical&&) noexcept = default;
+    Cylindrical(const Cartesian& cartesian)
+        : radius{sqrt(cartesian.value().x() * cartesian.value().x() + cartesian.value().y() * cartesian.value().y())}
+        , angle{qty::angle::FullRadian::range().modulo(std::atan2(cartesian.value().y(), cartesian.value().x()))}
+        , height{cartesian.value().z()}
+    {
+    }
+    ~Cylindrical() = default;
+
+    Cylindrical& operator=(const Cylindrical&) = default;
+    Cylindrical& operator=(Cylindrical&&) = default;
+
+    Cartesian toCartesian() const
+    {
+        const double r = radius.value();
+        return {{r * cos(angle.value()), r * sin(angle.value()), height.value()}};
+    }
+
+    qty::positive::Metre radius;
+    qty::angle::FullRadian angle;
+    qty::Metre height;
+};
+
+} // namespace position
+
+namespace velocity
+{
+
+using Cartesian = qty::Quantity<Vector, math::unit::Velocity>;
+
+} // namespace velocity
+
 namespace coordinates
 {
 
 class Cartesian
 {
 public:
-    using Position = qty::Quantity<Vector, math::unit::Metre>;
-    using Velocity = qty::Quantity<Vector, math::unit::Velocity>;
     using SAM = qty::Quantity<Vector, math::unit::Unit<math::unit::ratio::NegOne, math::unit::ratio::Two>>;
+
+    using Position = position::Cartesian;
+    using Velocity = velocity::Cartesian;
 
     Cartesian(const Position& position, const Velocity& velocity);
     static Cartesian zero();
