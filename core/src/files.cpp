@@ -14,7 +14,7 @@ namespace
 {
 
 template <class T>
-void loadFile(const std::filesystem::path& path, Owning1DArray<T>& buffer)
+void loadFileAs(const std::filesystem::path& path, Owning1DArray<T>& buffer)
 {
     std::ifstream ifs{path, std::ios::binary | std::ios::ate};
     const size_t size = ifs.tellg();
@@ -91,12 +91,16 @@ void TemporaryFile::remove()
     path_ = "";
 }
 
-Owning1DArray<uint32_t> FilesManager::loadShader(ShaderType type)
+Owning1DArray<uint32_t> FilesManager::loadFile(const std::filesystem::path& filePath)
 {
-    const auto path = std::filesystem::path{"/"} / "home" / "jrenggli" / "temp" /
-                      (std::string(type == ShaderType::DirectVertex ? "vert" : "frag") + ".spv");
+    const auto data = std::filesystem::path("data");
+    const auto fullPath = absolute(data / filePath);
+    if (!exists(fullPath))
+    {
+        throw std::runtime_error("No such shader file: " + fullPath.string());
+    }
     Owning1DArray<uint32_t> buffer;
-    loadFile(path, buffer);
+    loadFileAs(fullPath, buffer);
     return buffer;
 }
 

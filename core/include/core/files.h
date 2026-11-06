@@ -53,12 +53,7 @@ private:
 class FilesManager
 {
 public:
-    enum class ShaderType
-    {
-        DirectVertex,
-        DirectFragment,
-    };
-    static Owning1DArray<uint32_t> loadShader(ShaderType type);
+    static Owning1DArray<uint32_t> loadFile(const std::filesystem::path& filePath);
 };
 
 } // namespace galaxias
