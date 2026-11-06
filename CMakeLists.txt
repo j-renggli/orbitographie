@@ -25,22 +25,3 @@ find_package(Eigen3 REQUIRED)
 add_subdirectory(core)
 add_subdirectory(math)
 add_subdirectory(orbit)
-
-set(library_src
-    main.cpp
-    .clang-format
-)
-
-set_source_files_properties(.clang-format PROPERTIES HEADER_FILE_ONLY TRUE)
-
-add_executable(orbitographie ${library_src})
-
-set_property(TARGET orbitographie PROPERTY COMPILE_WARNING_AS_ERROR ON)
-
-target_link_libraries(orbitographie
-    math
-    orbit
-)
-
-source_group("res" REGULAR_EXPRESSION ".*")
-source_group("src" REGULAR_EXPRESSION ".*\\.(cpp|h|inl)")
