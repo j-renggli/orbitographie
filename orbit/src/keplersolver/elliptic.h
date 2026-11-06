@@ -12,7 +12,7 @@ class EllipticKeplerSolver : public UniversalKeplerSolver
 public:
     EllipticKeplerSolver(CenterOfMass&& com)
         : UniversalKeplerSolver{std::move(com)}
-        , period_{com.orbitalPeriod()}
+        , period_{com_.orbitalPeriod()}
     {
     }
 
